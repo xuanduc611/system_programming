@@ -29,5 +29,4 @@ int main(int argc, char **argv)
         perror("my_cat: Can not reach the end of file");
         exit(EXIT_FAILURE);
     }
-
 }
