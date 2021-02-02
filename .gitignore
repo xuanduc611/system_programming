@@ -56,12 +56,12 @@ dbg.c
 dbg
 
 # Output files
-./common/1_print_numbers/main
-./linux_cmd/cat/my_cat
-./linux_cmd/ls/my_ls
-./linux_cmd/mv/my_mv
-./system_programming_concept/socket/unix/basic_stream/u_cli
-./system_programming_concept/socket/unix/basic_stream/u_svr
-./system_programming_concept/thread/detached_thread/detached_thread
-./system_programming_concept/thread/multi_thread/multi_thread
-./system_programming_concept/thread/sample_thread/sample_thread
+common/1_print_numbers/main
+linux_cmd/cat/my_cat
+linux_cmd/ls/my_ls
+linux_cmd/mv/my_mv
+system_programming_concept/socket/unix/basic_stream/u_cli
+system_programming_concept/socket/unix/basic_stream/u_svr
+system_programming_concept/thread/detached_thread/detached_thread
+system_programming_concept/thread/multi_thread/multi_thread
+system_programming_concept/thread/sample_thread/sample_thread
