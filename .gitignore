@@ -62,6 +62,8 @@ linux_cmd/ls/my_ls
 linux_cmd/mv/my_mv
 system_programming_concept/socket/unix/basic_stream/u_cli
 system_programming_concept/socket/unix/basic_stream/u_svr
+system_programming_concept/socket/unix/basic_dgram/ud_cli
+system_programming_concept/socket/unix/basic_dgram/ud_svr
 system_programming_concept/thread/detached_thread/detached_thread
 system_programming_concept/thread/multi_thread/multi_thread
 system_programming_concept/thread/sample_thread/sample_thread
