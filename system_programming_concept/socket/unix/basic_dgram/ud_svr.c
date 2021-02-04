@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     svr_addr.sun_family = AF_UNIX;
     strncpy(svr_addr.sun_path, SOCKET_SV_PATH, sizeof(svr_addr.sun_path) - 1);
 
-    if (bind(sfd, &svr_addr, sizeof(struct sockaddr_un)) == -1) {
+    if (bind(sfd, (struct sockaddr *)&svr_addr, sizeof(struct sockaddr_un)) == -1) {
         printf("Error line|%d|: %s\n", __LINE__, strerror(errno));
         exit(EXIT_FAILURE);
     }
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     while (1) {
         // Receive data from client:
         cli_addr_len = sizeof (struct sockaddr_un);
-        num_rw = recvfrom(sfd, buf, SOCK_BUF_SIZE, 0, cli_addr, cli_addr_len);
+        num_rw = recvfrom(sfd, buf, SOCK_BUF_SIZE, 0, (struct sockaddr *) &cli_addr, &cli_addr_len);
 
         if (num_rw == -1) {
             printf("Error line|%d|: %s\n", __LINE__, strerror(errno));
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
         }
 
         // Send back uppercase-ed characters to client:
-        if (sendto(sfd, buf, num_rw, 0, &cli_addr, cli_addr_len) != num_rw) {
+        if (sendto(sfd, buf, num_rw, 0, (struct sockaddr *) &cli_addr, cli_addr_len) != num_rw) {
             printf("Error line|%d|: %s\n", __LINE__, strerror(errno));
             exit(EXIT_FAILURE);
         }

@@ -5,7 +5,7 @@
 int main(int argc, char **argv)
 {
     struct sockaddr_un  svr_addr, cli_addr;
-    int                 sfd, i;
+    int                 sfd;
     ssize_t             num_rw;
     socklen_t           svr_addr_len;
     char                sock_buf[SOCK_BUF_SIZE];
@@ -24,23 +24,24 @@ int main(int argc, char **argv)
     cli_addr.sun_family = AF_UNIX;
     snprintf(cli_addr.sun_path, sizeof(cli_addr.sun_path), \
             "/tmp/dxduc/ud_cli.%ld", (long)getpid());
-    if (bind(sfd, cli_addr.sun_path, sizeof(struct sockaddr_un)) == -1) {
+    if (bind(sfd, (struct sockaddr *) &cli_addr, sizeof(struct sockaddr_un)) == -1) {
         printf("Error line|%d|: %s\n", __LINE__, strerror(errno));
         exit(EXIT_FAILURE);
     }
 
     // Construct server's address:
     memset(&svr_addr, 0, sizeof(struct sockaddr_un));
-    svr_addr.sun_path = AF_UNIX;
+    svr_addr.sun_family = AF_UNIX;
     strncpy(svr_addr.sun_path, SOCKET_SV_PATH, sizeof(svr_addr.sun_path) - 1);
 
     while (1) {
         printf("Msg to server: ");
         num_rw = read(STDIN_FILENO, in_buf, IN_BUF_SIZE);
 
+        svr_addr_len = sizeof(struct sockaddr_un);
         if (num_rw > 0) {
             // Send msg to server:
-            if (sendto(sfd, in_buf, num_rw, 0, &svr_addr, sizeof(struct sockaadr_un)) == -1) {
+            if (sendto(sfd, in_buf, num_rw, 0, (struct sockaddr *) &svr_addr, svr_addr_len) == -1) {
                 printf("Error line|%d|: %s\n", __LINE__, strerror(errno));
                 exit(EXIT_FAILURE);
             }
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
         }
 
         // Read response from server
-        if (recvfrom(sfd, sock_buf, SOCK_BUF_SIZE, 0, &svr_addr, &svr_addr_len) == -1) {
+        if (recvfrom(sfd, sock_buf, SOCK_BUF_SIZE, 0, (struct sockaddr *) &svr_addr, &svr_addr_len) == -1) {
             printf("Error line|%d|, %s", __LINE__, strerror(errno));
             exit(EXIT_FAILURE);
         } else {

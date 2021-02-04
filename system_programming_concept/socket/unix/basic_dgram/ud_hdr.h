@@ -12,6 +12,7 @@
 
 #include <errno.h>
 #include <unistd.h>
+#include <ctype.h>
 
 // * The Makefile should have created /tmp/dxduc before run this program
 #define SOCKET_SV_PATH      "/tmp/dxduc/ud_basic"
