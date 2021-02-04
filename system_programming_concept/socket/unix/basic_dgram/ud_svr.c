@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 
     while (1) {
         // Receive data from client:
+        memset(buf, 0, sizeof(buf));
         cli_addr_len = sizeof (struct sockaddr_un);
         num_rw = recvfrom(sfd, buf, SOCK_BUF_SIZE, 0, (struct sockaddr *) &cli_addr, &cli_addr_len);
 
@@ -47,7 +48,7 @@ int main(int argc, char **argv)
             exit(EXIT_FAILURE);
         }
 
-        printf("Server received %ld bytes from %s\n", (long)num_rw, cli_addr.sun_path);
+        printf("Server received %ld bytes from %s, ret_buf=|%.*s|, len=%ld\n", (long)num_rw, cli_addr.sun_path, (int)num_rw, buf, num_rw);
 
         // Uppercase received characters:
         for (i = 0; i < num_rw; i++) {
@@ -55,7 +56,8 @@ int main(int argc, char **argv)
         }
 
         // Send back uppercase-ed characters to client:
-        if (sendto(sfd, buf, num_rw, 0, (struct sockaddr *) &cli_addr, cli_addr_len) != num_rw) {
+        printf("Send back to client: |%.*s|, len=%ld\n", (int)num_rw, buf, num_rw);
+        if (sendto(sfd, buf, strlen(buf), 0, (struct sockaddr *) &cli_addr, cli_addr_len) != strlen(buf)) {
             printf("Error line|%d|: %s\n", __LINE__, strerror(errno));
             exit(EXIT_FAILURE);
         }
