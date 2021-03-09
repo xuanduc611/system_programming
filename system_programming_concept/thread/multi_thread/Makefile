@@ -8,7 +8,7 @@ multi_thread: multi_thread.o
 	$(CC) multi_thread.o -pthread -o multi_thread
 
 # Generate object files without linking
-multi_thread.o:
+multi_thread.o: multi_thread.c
 	$(CC) -Wall -c multi_thread.c
 
 clean: 
