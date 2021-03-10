@@ -60,8 +60,6 @@ static void *check_cmd_thr(void *arg)
 
     printf ("Start %s\n", __func__);
     while (1) {
-        SERVER_LOCK();
-
         len = read(STDIN_FILENO, in_buf, sizeof(in_buf)); 
         if (len == -1) {
             printf("Error line[%d]: fails to read from stdin, %s\n", __LINE__, strerror(errno));
@@ -75,6 +73,7 @@ static void *check_cmd_thr(void *arg)
 
         in_buf[len - 1] = 0x0;
 
+        SERVER_LOCK();
         if (strcmp(in_buf, "start") == 0) {
             printf("=> Start receiving packets\n");
             rx_is_allowed = 1;
@@ -85,7 +84,6 @@ static void *check_cmd_thr(void *arg)
             printf("Invalid input buffer\n");
         }
 
-        fflush(stdout);
         SERVER_UNLOCK();
     }
 
@@ -109,7 +107,6 @@ static void *server_thr(void *arg)
 
     while (1) {
         SERVER_LOCK();
-        fflush(stdout); // * clear the output buffer and move the buffered data to output (a.k.a console in this case)
 
         if (rx_is_allowed) {    
             // Receive data from client:
@@ -118,9 +115,11 @@ static void *server_thr(void *arg)
 
             if (num_rw == -1) {
                 printf("Error line[%d]: %s\n", __LINE__, strerror(errno));
+                SERVER_UNLOCK();
                 continue;
             }
             
+            SERVER_UNLOCK();
             printf("Server received %ld bytes, ret_buf=[%.*s]\n", (long)num_rw, (int)num_rw, buf);
         }
 
