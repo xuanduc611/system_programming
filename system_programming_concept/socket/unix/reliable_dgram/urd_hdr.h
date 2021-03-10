@@ -14,8 +14,9 @@
 #include <unistd.h>
 
 #define SOCKET_SV_PATH      "/tmp/dxduc/ud_reliable"
-#define SOCKET_BUF_SIZE     10
+#define SOCKET_BUF_SIZE     20
 
+typedef struct sockaddr     SOCK_ADDR_t;
 typedef struct sockaddr_un  SOCK_ADDR_UN_t;
 typedef socklen_t           SOCKLEN_t;
 

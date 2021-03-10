@@ -8,14 +8,15 @@ DEP = urd_hdr.h
 
 all : urd_svr urd_cli
 	if [ -d /tmp/dxduc ] ; then \
-		echo "/tmp/dxduc existed"; \ 
+		echo "/tmp/dxduc existed"; \
 	else \
 		echo "Create /tmp/dxduc"; \
+		mkdir -p /tmp/dxduc; \
 	fi;
 
 # Generate output and link object files
 urd_svr: urd_svr.o
-	$(CC) urd_svr.o -o urd_svr
+	$(CC) urd_svr.o -pthread -o urd_svr
 
 urd_cli: urd_cli.o
 	$(CC) urd_cli.o -o urd_cli
