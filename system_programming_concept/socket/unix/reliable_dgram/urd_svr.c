@@ -2,7 +2,7 @@
 #include <pthread.h>
 
 #define SERVER_LOCK()       pthread_mutex_lock(&mtx)
-#define SERVER_UNLOCK()     pthread_mutex_unlock(&mtx);
+#define SERVER_UNLOCK()     pthread_mutex_unlock(&mtx)
 
 static u_int8_t rx_is_allowed = 0;
 static pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
@@ -73,18 +73,21 @@ static void *check_cmd_thr(void *arg)
 
         in_buf[len - 1] = 0x0;
 
-        SERVER_LOCK();
         if (strcmp(in_buf, "start") == 0) {
             printf("=> Start receiving packets\n");
+
+            SERVER_LOCK();
             rx_is_allowed = 1;
+            SERVER_UNLOCK();
         } else if (strcmp(in_buf, "stop") == 0) {
             printf("=> Stop receiving packets\n");
+            
+            SERVER_LOCK();
             rx_is_allowed = 0;
+            SERVER_UNLOCK();
         } else {
             printf("Invalid input buffer\n");
         }
-
-        SERVER_UNLOCK();
     }
 
     return 0;
@@ -106,6 +109,7 @@ static void *server_thr(void *arg)
     }
 
     while (1) {
+        usleep(100);
         SERVER_LOCK();
 
         if (rx_is_allowed) {    
@@ -119,7 +123,6 @@ static void *server_thr(void *arg)
                 continue;
             }
             
-            SERVER_UNLOCK();
             printf("Server received %ld bytes, ret_buf=[%.*s]\n", (long)num_rw, (int)num_rw, buf);
         }
 
