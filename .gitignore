@@ -69,3 +69,5 @@ system_programming_concept/thread/multi_thread/multi_thread
 system_programming_concept/thread/sample_thread/sample_thread
 system_programming_concept/socket/unix/reliable_dgram/urd_cli
 system_programming_concept/socket/unix/reliable_dgram/urd_svr
+system_programming_concept/socket/inet/tcp_stream/tcp_svr
+system_programming_concept/socket/inet/tcp_stream/tcp_cli

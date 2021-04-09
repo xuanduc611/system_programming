@@ -3,9 +3,21 @@
 
 #include <netdb.h>
 #include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <sys/types.h>
 #include <sys/socket.h>
+#include <string.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <errno.h>
 
-#define PORT_NUM        "50000"
-#define INT_LEN         30
+#define MAX     80
+#define PORT    50000
+
+typedef struct sockaddr SOCKADDR_t;
+typedef struct sockaddr_in SOCKADDR_IN_t;
 
 #endif // _TCP_STREAM_HDR_H_
+
